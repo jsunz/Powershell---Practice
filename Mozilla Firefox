@@ -1,0 +1,9 @@
+if((Get-ItemPropertyValue -LiteralPath 'HKLM:\SOFTWARE\Policies\Mozilla\Firefox' -Name PasswordManagerEnabled -ea SilentlyContinue) -eq 0)
+{
+Write-Host "Registry Key Is Good"
+}
+else
+{
+New-Item 'HKLM:\SOFTWARE\Policies\Mozilla\Firefox'-force -ea SilentlyContinue
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Mozilla\Firefox' -Name PasswordManagerEnabled -PropertyType dword -Value 0 -Force
+}

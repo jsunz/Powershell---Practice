@@ -1,0 +1,14 @@
+if(Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name PasswordManagerEnabled -ea SilentlyContinue) 
+{
+Write-Host "Registry Key Is Functional"
+}
+else
+{
+TaskKill /im msedge.exe /f /t
+New-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Edge'-ea SilentlyContinue
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name PasswordManagerEnabled -PropertyType dword -Value 0 -Force
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name BrowserSignin -PropertyType dword -Value 0 -Force
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name NonRemovableProfileEnabled -PropertyType dword -Value 0 -Force
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name SyncDisabled -PropertyType dword -Value 0 -Force
+Remove-Item "C:\Users\*\AppData\Local\Microsoft\Edge\User Data\Default\Login Data"
+}

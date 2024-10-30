@@ -1,0 +1,14 @@
+if(Get-ItemProperty -LiteralPath 'HKLM:\Software\Policies\Google\Chrome' -Name SyncDisabled -ea SilentlyContinue) 
+{
+Write-Host "Registry Key Is Functional"
+}
+else
+{
+TaskKill /im chrome.exe /f /t
+New-Item -Path 'HKLM:\SOFTWARE\Policies\Google\Chrome'-force -ea SilentlyContinue 
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Google\Chrome' -Name SyncDisabled  -PropertyType dword -Value 1 -Force
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Google\Chrome' -Name SigninAllowed  -PropertyType dword -Value 0 -Force
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Google\Chrome' -Name PasswordManagerEnabled  -PropertyType dword -Value 0 -Force
+New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Google\Chrome' -Name PasswordSharingEnabled -PropertyType dword -Value 0 -Force
+Remove-Item "C:\Users\*\AppData\Local\Google\Chrome\User Data\Default\Login Data"
+}
